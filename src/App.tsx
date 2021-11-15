@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
+import ProductList from './Components/ProductList/ProductList';
+import CartList from './Components/CartList/CartList';
+import { useState } from 'react';
 function App() {
+  const [cartToggle, setcartToggle] = useState(false);
+
+  const cart_toggle = () => {
+    setcartToggle(!cartToggle);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { cartToggle? <CartList cart_toggle={cart_toggle} />: <></> }
+      <div className="header_nav">
+        <h5>Shopping Cart React</h5>
+        <button onClick={cart_toggle}>Cart</button>
+      </div>
+      <ProductList/>
     </div>
   );
 }
