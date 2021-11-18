@@ -1,0 +1,11 @@
+.cart_list_wrapper{
+   
+    background-color: brown;
+}
+.cartlistheader{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+}
