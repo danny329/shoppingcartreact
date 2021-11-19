@@ -2,61 +2,70 @@ import './App.css';
 import ProductList from './Components/ProductList/ProductList';
 import { CartList } from './Components/CartList/CartList';
 import { useState } from 'react';
-import { Badge, Drawer } from '@material-ui/core';
 import React from 'react';
-
+import { AppBar, Badge, Drawer, Icon, IconButton, Toolbar, Typography } from '@mui/material';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import MenuIcon from '@mui/icons-material/Menu';
 export type CartItemTypes = {
-  id: number,
-  title: string,
-  price: number,
-  category: string,
-  description: string,
-  image: string,
-  quantity: number
+    id: number,
+    title: string,
+    price: number,
+    category: string,
+    description: string,
+    image: string,
+    quantity: number
 }
 export type contextType = {
-  cartItems : CartItemTypes[],
-  addToCart: (item: CartItemTypes) => void ,
-  removeFromCart : (id: number)=>void ,
-  increaseQuantity : (id: number)=>void ,
-  decreaseQuantity : (id: number)=>void ,
+    cartItems: CartItemTypes[],
+    addToCart: (item: CartItemTypes) => void,
+    removeFromCart: (id: number) => void,
+    decreaseQuantity: (id: number) => void,
 }
 export const MyContext = React.createContext({} as contextType);
 
 function App() {
-  const [cartToggle, setcartToggle] = useState(false);
-  const [cartItems, setcartItems] = useState<CartItemTypes[]>([]);
+    const [cartToggle, setcartToggle] = useState(false);
+    const [cartItems, setcartItems] = useState<CartItemTypes[]>([]);
 
-  const getTotalItem = (items: CartItemTypes[]): number => items.reduce((ack, item) => ack + item.price, 0);
-  
-  const addToCart = (item: CartItemTypes) => {
-    setcartItems([...cartItems, item])
-  };
-  const removeFromCart = (id:number) => {
-    setcartItems(cartItems.filter(e=>e.id!=id));
-  };
-  const increaseQuantity =(id:number) => {
-    let item = cartItems.find(e=>e.id === id);
+    const getTotalItem = (items: CartItemTypes[]): number => items.reduce((ack, item) => ack + item.price, 0);
 
-  };
-  const decreaseQuantity =(id:number) => null;
+    const getTotalCount = (items: CartItemTypes[]): number => items.length
 
-  return (
-    <MyContext.Provider value={{ cartItems:cartItems, increaseQuantity: increaseQuantity, decreaseQuantity: decreaseQuantity, addToCart:addToCart, removeFromCart: removeFromCart}} >
-      <div className="App">
-        <Drawer anchor="right" open={cartToggle} onClose={() => setcartToggle(false)}>
-          <CartList />
-        </Drawer>
-        <div className="header_nav">
-          <h5>Shopping Cart React</h5>
-          <Badge badgeContent={getTotalItem(cartItems)} color="error">
-            <button onClick={() => setcartToggle(true)}>Cart</button>
-          </Badge>
-        </div>
-        <ProductList />
-      </div>
-    </MyContext.Provider>
-  );
+    const addToCart = (item: CartItemTypes) => {
+        if (cartItems.find(e => e.id === item.id)) setcartItems(cartItems.map(e => e.id === item.id ? { ...item, quantity: e.quantity + 1 } : item))
+        else setcartItems([...cartItems, item])
+    }
+
+    const removeFromCart = (id: number) => {
+        setcartItems(cartItems.filter(e => e.id !== id));
+    };
+
+    const decreaseQuantity = (id: number) => null;
+
+    return (
+        <MyContext.Provider value={{ cartItems: cartItems, decreaseQuantity: decreaseQuantity, addToCart: addToCart, removeFromCart: removeFromCart }} >
+            <Drawer anchor="right" open={cartToggle} onClose={() => setcartToggle(false)}>
+                <CartList />
+            </Drawer>
+            <AppBar position="static" >
+                <Toolbar variant="dense" >
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1}}>
+                        Shopping Cart React
+                    </Typography>
+                    <IconButton edge="end" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                        <Badge badgeContent={getTotalCount(cartItems)} color="error" >
+                            <ShoppingCartOutlinedIcon onClick={() => setcartToggle(true)}></ShoppingCartOutlinedIcon>
+                        </Badge>
+                    </IconButton>                    
+                </Toolbar>
+            </AppBar>
+            <ProductList />
+
+        </MyContext.Provider>
+    );
 }
 
 export default App;

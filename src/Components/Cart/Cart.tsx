@@ -7,7 +7,7 @@ export interface Props {
 }
 
 export const Cart: React.FC<Props> = ({item}) => {
-  const {increaseQuantity, decreaseQuantity, removeFromCart} = useContext(MyContext);
+  const {addToCart, decreaseQuantity, removeFromCart} = useContext(MyContext);
   return (
     <div>
       <h3>{item.title}</h3>
@@ -16,7 +16,7 @@ export const Cart: React.FC<Props> = ({item}) => {
         <p>{item.price * item.quantity}</p>
       </div>
       <div>
-        <button onClick={()=>increaseQuantity(item.id)}>+</button>
+        <button onClick={()=>addToCart(item)}>+</button>
         <button onClick={()=>decreaseQuantity(item.id)}>-</button>
         <button onClick={()=>removeFromCart(item.id)}>delete</button>
       </div>
