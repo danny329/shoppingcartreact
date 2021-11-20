@@ -2,6 +2,7 @@ import { useContext } from "react";
 import "../../styles/CartList.css";
 import { Cart } from '../Cart/Cart';
 import {MyContext} from '../../App';
+import { List } from "@mui/material";
 
 
 export function CartList() {
@@ -12,14 +13,14 @@ export function CartList() {
             <div className="cartlistheader">
                 <p>Your Shopping Cart</p>
             </div>
+            <List>
             {
                 cartItems?
-                <div className="cartswrapper">
-                    {cartItems.map(e => <Cart item={e} />)}
-                </div>                
+                cartItems.map(e => <Cart item={e} />)
                 :
                 <div>"Cart list is empty"</div>
             }
+            </List>
         </div>
     );
 }
