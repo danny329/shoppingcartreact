@@ -2,17 +2,15 @@ import { useContext } from "react";
 import "../../styles/CartList.css";
 import { Cart } from '../Cart/Cart';
 import {MyContext} from '../../App';
-import { List } from "@mui/material";
+import { List, Typography } from "@mui/material";
 
 
 export function CartList() {
   const {cartItems} = useContext(MyContext);
 
     return (
-        <div className="cart_list_wrapper">
-            <div className="cartlistheader">
-                <p>Your Shopping Cart</p>
-            </div>
+        <>
+            <Typography>Your Shopping Cart</Typography>
             <List>
             {
                 cartItems?
@@ -21,7 +19,7 @@ export function CartList() {
                 <div>"Cart list is empty"</div>
             }
             </List>
-        </div>
+        </>
     );
 }
 

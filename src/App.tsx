@@ -20,6 +20,8 @@ export type contextType = {
     addToCart: (item: CartItemTypes) => void,
     removeFromCart: (id: number) => void,
     decreaseQuantity: (id: number) => void,
+    increaseQuantity: (id: number) => void,
+    setcartToggle: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const MyContext = React.createContext({} as contextType);
 
@@ -32,19 +34,29 @@ function App() {
     const getTotalCount = (items: CartItemTypes[]): number => items.length
 
     const addToCart = (item: CartItemTypes) => {
-        if (cartItems.find(e => e.id === item.id)) setcartItems(cartItems.map(e => e.id === item.id ? { ...item, quantity: e.quantity + 1 } : item))
-        else setcartItems([...cartItems, item])
+        setcartItems([...cartItems, item])
     }
 
     const removeFromCart = (id: number) => {
         setcartItems(cartItems.filter(e => e.id !== id));
     };
 
-    const decreaseQuantity = (id: number) => null;
+    const increaseQuantity = (id: number) => {
+        setcartItems(cartItems.map(e => e.id === id ? { ...e, quantity: e.quantity + 1 } : e));
+    };
+    const decreaseQuantity = (id: number) => {
+        let newcartlist = cartItems.map(e => {
+            if(e.id === id ) return { ...e, quantity: e.quantity - 1 }                            
+            else return e
+        });
+        newcartlist = newcartlist.filter(e=>e.quantity > 0);
+        setcartItems(newcartlist);
+
+    };
 
     return (
-        <MyContext.Provider value={{ cartItems: cartItems, decreaseQuantity: decreaseQuantity, addToCart: addToCart, removeFromCart: removeFromCart }} >
-            <Drawer anchor="right" open={cartToggle} onClose={() => setcartToggle(false)}>
+        <MyContext.Provider value={{ cartItems: cartItems, setcartToggle: setcartToggle, increaseQuantity: increaseQuantity, decreaseQuantity: decreaseQuantity, addToCart: addToCart, removeFromCart: removeFromCart }} >
+            <Drawer anchor="right" open={cartToggle} onClose={() => setcartToggle(false)} sx={{ width: '400px', overflow: 'hidden' }}>
                 <CartList />
             </Drawer>
             <AppBar position="static" >
@@ -52,18 +64,17 @@ function App() {
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1}}>
+                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
                         Shopping Cart React
                     </Typography>
                     <IconButton edge="end" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                         <Badge badgeContent={getTotalCount(cartItems)} color="error" >
                             <ShoppingCartOutlinedIcon onClick={() => setcartToggle(true)}></ShoppingCartOutlinedIcon>
                         </Badge>
-                    </IconButton>                    
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <ProductList />
-
         </MyContext.Provider>
     );
 }

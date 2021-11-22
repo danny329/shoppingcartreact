@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { MyContext } from '../../App';
 import "../../styles/Product.css";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Card, CardActions, CardContent, CardMedia, Grid, Typography, Chip,Rating   } from '@mui/material';
 
 export interface IProductProps {
@@ -19,9 +20,9 @@ export interface IProductProps {
     }
 }
 
-export const Product: React.FC<IProductProps> = ({ id, title, price, category, description, image, rating }) => {
-
-    const { addToCart } = useContext(MyContext);
+export const Product: React.FC<IProductProps> = (props ) => {
+    const { id, title, price, category, description, image, rating } = props;
+    const { addToCart, cartItems, setcartToggle } = useContext(MyContext);
     const info = { id: id, title: title, price: price, category: category, description: description, image: image, quantity: 1 }
     return (
         <Grid item xs={12} sm={6} md={3} >
@@ -38,13 +39,16 @@ export const Product: React.FC<IProductProps> = ({ id, title, price, category, d
                 <CardContent sx={{ display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center' }} >
                     <Typography 
                     variant="button" 
-                    display="block" 
                     sx={{
                         fontWeight: 'bold',
                         overflow: "hidden",
-                        maxHeight: "30px",
+                        height: "30px",
                         textOverflow: "ellipsis",
                         display: "block",
+                        whiteSpace:'nowrap',
+                        width:'90%',
+                        margin:'auto',
+                        textAlign:'center'
                     }} 
                     gutterBottom 
                     title={title}
@@ -63,9 +67,16 @@ export const Product: React.FC<IProductProps> = ({ id, title, price, category, d
                     <Typography variant="subtitle1" gutterBottom>{`Price ${price}`}</Typography>
                 </CardContent>
                 <CardActions>
-                    <Button  size="small" sx={{width:'100%'}} onClick={() => addToCart(info)} variant="outlined" startIcon={<AddShoppingCartIcon />}>
-                        Add to Cart
-                    </Button>
+                    {
+                        cartItems.find(e=>e.id === id) ? 
+                        <Button  size="small" sx={{width:'100%'}} color="success" onClick={() => setcartToggle(true)} variant="contained" startIcon={<CheckCircleOutlineIcon />} >
+                            Added to Cart
+                        </Button>
+                         :
+                        <Button  size="small" sx={{width:'100%'}} onClick={() => addToCart(info)} variant="outlined" startIcon={<AddShoppingCartIcon />}>
+                            Add to Cart
+                        </Button>
+                    }
                 </CardActions>
             </Card>
         </Grid>
