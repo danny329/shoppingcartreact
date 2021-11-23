@@ -3,7 +3,7 @@ import ProductList from './Components/ProductList/ProductList';
 import { CartList } from './Components/CartList/CartList';
 import { useState } from 'react';
 import React from 'react';
-import { AppBar, Badge, Drawer, Icon, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Badge, Drawer,  IconButton, Toolbar, Typography } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 export type CartItemTypes = {
@@ -21,7 +21,8 @@ export type contextType = {
     removeFromCart: (id: number) => void,
     decreaseQuantity: (id: number) => void,
     increaseQuantity: (id: number) => void,
-    setcartToggle: React.Dispatch<React.SetStateAction<boolean>>
+    setcartToggle: React.Dispatch<React.SetStateAction<boolean>>,
+    getGrandTotal: (items: CartItemTypes[]) => number
 }
 export const MyContext = React.createContext({} as contextType);
 
@@ -29,7 +30,7 @@ function App() {
     const [cartToggle, setcartToggle] = useState(false);
     const [cartItems, setcartItems] = useState<CartItemTypes[]>([]);
 
-    const getTotalItem = (items: CartItemTypes[]): number => items.reduce((ack, item) => ack + item.price, 0);
+    const getGrandTotal = (items: CartItemTypes[]): number => items.reduce((ack, item) => ack + item.price * item.quantity, 0);
 
     const getTotalCount = (items: CartItemTypes[]): number => items.length
 
@@ -55,8 +56,8 @@ function App() {
     };
 
     return (
-        <MyContext.Provider value={{ cartItems: cartItems, setcartToggle: setcartToggle, increaseQuantity: increaseQuantity, decreaseQuantity: decreaseQuantity, addToCart: addToCart, removeFromCart: removeFromCart }} >
-            <Drawer anchor="right" open={cartToggle} onClose={() => setcartToggle(false)} sx={{ width: '400px', overflow: 'hidden' }}>
+        <MyContext.Provider value={{ cartItems: cartItems,getGrandTotal: getGrandTotal, setcartToggle: setcartToggle, increaseQuantity: increaseQuantity, decreaseQuantity: decreaseQuantity, addToCart: addToCart, removeFromCart: removeFromCart }} >
+            <Drawer anchor="right" open={cartToggle} onClose={() => setcartToggle(false)} sx={{ width: '300px', overflow: 'hidden' }}>
                 <CartList />
             </Drawer>
             <AppBar position="static" >

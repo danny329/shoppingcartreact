@@ -13,7 +13,7 @@ export interface Props {
 export const Cart: React.FC<Props> = ({ item }) => {
   const { increaseQuantity, decreaseQuantity, removeFromCart } = useContext(MyContext);
   return (
-    <Card sx={{ display: 'flex', width: '250px', height: '100px', margin: '3px', padding: '3px', alignItems: 'center' }}>
+    <Card sx={{ display: 'flex', width: '280px', height: '100px', margin: '3px auto', padding: '3px', alignItems: 'center' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', overflow: 'hidden', pt: 1 }}>
         <CardContent sx={{ padding: "3px" }}>
           <Typography sx={{
@@ -22,11 +22,11 @@ export const Cart: React.FC<Props> = ({ item }) => {
           }} title={item.title}>
             {item.title}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" component="div" sx={{ fontSize: "10px" }}>
-            {item.price}
+          <Typography variant="subtitle1" color="text.secondary" component="div" sx={{ fontSize: "10px", fontWeight:'bold' }}>
+            <span style={{fontWeight:'lighter'}}>Price:</span> {item.price}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" component="div" sx={{ fontSize: "10px" }}>
-            {item.price * item.quantity}
+          <Typography variant="subtitle1" color="text.secondary" component="div" sx={{ fontSize: "10px", fontWeight:'bold' }}>
+            <span style={{fontWeight:'lighter'}}>Total:</span> {item.price * item.quantity}
           </Typography>
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', }}>

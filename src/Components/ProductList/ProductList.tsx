@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { IProductProps, Product } from '../Product/Product';
 import "../../styles/ProductList.css";
-import { Grid, LinearProgress, Typography } from '@mui/material';
+import { Grid, LinearProgress } from '@mui/material';
 
 
 interface ProductListProps {
